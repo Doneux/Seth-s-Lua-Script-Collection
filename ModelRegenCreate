@@ -1,0 +1,17 @@
+-- regen script
+-- note that the model in this case exists elsewhere in the world
+-- you may use similar method with a model in ServerScriptStorage, accessed in world.ServerScriptStorage.Model
+local model = game.Workspace.modelregensystem.Model
+-- brick is a green brick with a click detector. adjust as needed.
+local brick = script.Parent
+
+-- set a primary part for cframing
+model.PrimaryPart = game.Workspace.modelregensystem.Model.primary
+
+brick.ClickDetector.MouseClick:Connect(function()
+	local clone = model:Clone()
+	-- puts the clone in the folder, allowing the destroyer script to find the duplicate, and not the original.
+	clone.Parent = game.Workspace.modelregensystem.Folder
+	-- places the primary part where we want it. you may use Vector3 positioning, otherwise test cframe positions with print statements
+	clone:SetPrimaryPartCFrame(CFrame.new(0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1))
+end)
