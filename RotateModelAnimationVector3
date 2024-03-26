@@ -1,3 +1,4 @@
+-- rotate an object via click detection in a smooth animation
 -- fix variable(s) to desired item(s):
 local titem = game.Workspace.titem
 local itemturned = false
