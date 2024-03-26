@@ -1,0 +1,28 @@
+-- fix variable(s) to desired item(s):
+local titem = game.Workspace.titem
+local itemturned = false
+
+-- this script should be on the object with the click detector for the following to work:
+script.Parent.ClickDetector.MouseClick:Connect(function()
+	
+	if not itemturned then
+		-- we iterate 10 times, for 0.1 seconds each, adding up to 1 sec. adjust numbers if desired
+		for i=1,10,1 do
+			-- adjust the total rotation you want to do by the number of iterations
+			-- pay attention to axes. this works for the y axis. review Vector3 if needed
+			titem.Rotation -= Vector3.new(0, (90 / 10), 0)
+			wait(0.1)
+		end
+		-- sometimes you cross axes and need to adjust to make the math work. use this method)
+		bchair.Rotation = Vector3.new(180, -89.9, 180)
+		-- now the position is set ever so slightly into the correct rotation axis, but the animation still looks smooth.
+		itemturned = true	
+	else
+		for i=0,10,1 do
+			bchair.Handle.Rotation += Vector3.new(0, (90 / 10), 0)
+			wait(0.1)
+		end
+		titem.Handle.Rotation = Vector3.new(180, 0, 180)
+		itemturned = false
+	end
+end)
