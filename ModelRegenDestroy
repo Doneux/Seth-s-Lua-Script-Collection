@@ -1,0 +1,11 @@
+-- destroy script
+-- replace model with desired model. i recommend using a folder.
+local model = game.Workspace.modelregensystem.Model
+-- brick is, in this case, a red part with a click detector.
+local brick = script.Parent
+
+
+brick.ClickDetector.MouseClick:Connect(function()
+	-- in this case, our folder containing the cloned model is destroyed, keeping the original model elsewhere in the world intact.
+	game.Workspace.modelregensystem.Folder:ClearAllChildren()
+end)
