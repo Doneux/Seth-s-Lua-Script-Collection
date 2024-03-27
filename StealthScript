@@ -1,0 +1,17 @@
+-- inserted on an invisible, collision-disabled part that hides the user's name
+local part = script.Parent
+
+part.Touched:Connect(function(hit)
+	-- hit denotes the player class who contacts the brick.
+	if hit.Parent:FindFirstChild("Humanoid") then
+		-- blanks display name
+		hit.Parent.Humanoid.DisplayName = " "
+	end
+end)
+
+part.TouchEnded:Connect(function(hit)
+	if hit.Parent:FindFirstChild("Humanoid") then
+		-- resets name. note this removes nicknames, and that's a good thing
+		hit.Parent.Humanoid.DisplayName = hit.Parent.Name
+	end
+end)
