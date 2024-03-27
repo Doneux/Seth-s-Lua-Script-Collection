@@ -1,0 +1,15 @@
+-- rainbrick is a part that can be touched. change as desired.
+local rainbrick = script.Parent
+
+rainbrick.Touched:Connect(function()
+	while true do
+		wait()
+    -- set the range around the part where rain can fall
+		local rand = math.random(-1000,1000)
+		local rand2 = math.random(-1000,1000)
+		local Rainfall = Instance.new("Part",game.Workspace)
+		Rainfall.Size = Vector3.new(0.5,1,0.5)
+		Rainfall.Position = Vector3.new(rand,50,rand2)
+		Rainfall.Transparency = 0.5
+	end
+end)
