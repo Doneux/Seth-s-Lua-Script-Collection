@@ -1,6 +1,7 @@
 -- regen script
 -- note that the model in this case exists elsewhere in the world
 -- IMPORTANT NOTE: the model is built such that when placed, an invisible brick covers the regen part, preventing clicks. to implement similar functionality, use a bool alongside the destroy script.
+-- an example of that functionality would be changing the click detector's max activation distance to 0, making it unclickable, if the model is generated. reset it to the default 32 when you destroy.
 -- you may use similar method with a model in ServerScriptStorage, accessed in world.ServerScriptStorage.Model
 local model = game.Workspace.modelregensystem.Model
 -- brick is a green brick with a click detector. adjust as needed.
