@@ -1,0 +1,34 @@
+-- opening a door model with cframe and primarypart in a smooth animation
+-- in this case, we only use the y axis to make the door rise, but a regular door would use x and z. adjust as needed.
+
+local dooropen = false
+local door = game.Workspace.door1
+door.PrimaryPart = door.mainpart
+
+script.Parent.ClickDetector.MouseClick:Connect(function()
+	script.Parent.ClickDetector.MaxActivationDistance = 0 -- while the door is opening, the button we use is disabled.
+  -- the cframe values here are taken directly from the object's properties, using specific positions on the level.
+  -- to avoid this hardcoded method, initialize x, y, and z with the object's properties in the script and simply add to them (+=) to achieve translation.
+	if not dooropen then
+		local y = 131.75
+		for i=1,20 do
+			y += 0.3
+			door:SetPrimaryPartCFrame(CFrame.new(68.882, y, -18.466))
+			wait (0.05)
+		end
+		-- the position is hardcoded after the animation for ease of control and bug prevention. good practice for these finicky numbers.
+		door:SetPrimaryPartCFrame(CFrame.new(68.882, 137.75, -18.466))
+		dooropen=true
+	else
+		local y = 137.75
+		for i=1,20 do
+			y -= 0.3
+			door:SetPrimaryPartCFrame(CFrame.new(68.882, y, -18.466))
+			wait (0.05)
+		end
+		door:SetPrimaryPartCFrame(CFrame.new(68.882, 131.75, -18.466))
+		dooropen=false
+	end
+	
+	script.Parent.ClickDetector.MaxActivationDistance = 32 -- enable the button now that the animation is complete.
+end)
