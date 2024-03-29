@@ -1,6 +1,6 @@
 Branch Directory:
 - Main
-  - General functions from various projects.
+  - General functions from all projects.
 - ModelRegenSystem
   - Functions of a two-part system that creates (via cloning) and destroys a model. Useful for loading minigame levels or other temporary objects.
 - GameplayScriptsFiredUp
