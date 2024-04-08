@@ -1,4 +1,4 @@
--- insert script on textured object, then offset U and V (X and Y respectively) once every 0.016s (matches 60FPS)
+-- insert script on textured object, then offset U and V (X and Y respectively) once every 0.016s (once per frame at 60FPS)
 while true do 
 	wait(0.016)
 	script.Parent.Texture.OffsetStudsU +=0
