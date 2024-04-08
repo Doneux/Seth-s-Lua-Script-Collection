@@ -13,6 +13,7 @@ end)
 part.TouchEnded:Connect(function(hit)
 	if hit.Parent:FindFirstChild("Humanoid") then
 		-- resets name. note this removes nicknames, and that's a good thing
+		-- alright, fine, not everyone likes that. to adjust, initialize a string object inside the player to hold their nickname on the function above, then use and delete it here.
 		hit.Parent.Humanoid.DisplayName = hit.Parent.Name
 	end
 end)
