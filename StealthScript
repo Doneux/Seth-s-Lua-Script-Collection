@@ -1,4 +1,5 @@
--- inserted on an invisible, collision-disabled part that hides the user's name
+-- NOTE: to be inserted on an invisible, collision-disabled part
+-- this part covers the stealth area, in my case a dense forest, and simply hides the player's username when inside.
 local part = script.Parent
 
 part.Touched:Connect(function(hit)
