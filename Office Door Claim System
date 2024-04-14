@@ -1,0 +1,19 @@
+-- office door claiming scripts
+
+-- script 1
+-- inserted on a text label, which is on a transparent part over the office door
+script.Parent.ClickDetector.MouseClick:Connect(function(player)
+	hasOffice = player.Character.hasOffice.Value
+	if (hasOffice == false) then
+		script.Parent.SurfaceGui.TextLabel.Text = "Office of " .. player.Name
+		script.Parent.ClickDetector:Destroy()
+		player.Character.hasOffice.Value = true
+		script:Destroy()
+	end
+end)
+
+--script 2
+--inserted in StarterPlayer.StarterCharacterScripts
+bval = Instance.new("BoolValue")
+bval.Parent = script.Parent
+bval.Name = "hasOffice"
