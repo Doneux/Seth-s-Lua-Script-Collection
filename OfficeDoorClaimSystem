@@ -2,13 +2,26 @@
 
 -- script 1
 -- inserted on a text label, which is on a transparent part over the office door
+
+local claimed = false
+local actdist = script.Parent.ClickDetector.MaxActivationDistance -- holds onto default activation range
+local owner = nil -- will hold owner later
+
 script.Parent.ClickDetector.MouseClick:Connect(function(player)
-	hasOffice = player.Character.hasOffice.Value
-	if (hasOffice == false) then
+	local hasOffice = player.Character.hasOffice.Value
+	if ((hasOffice == false) and (claimed == false)) then
+		owner = player
 		script.Parent.SurfaceGui.TextLabel.Text = "Office of " .. player.Name
-		script.Parent.ClickDetector:Destroy()
 		player.Character.hasOffice.Value = true
-		script:Destroy()
+		script.Parent.ClickDetector.MaxActivationDistance = 0
+	end
+end)
+
+game.Players.PlayerRemoving:Connect(function(player)
+	if (player == owner) then
+		script.Parent.SurfaceGui.TextLabel.Text = "Unclaimed Office"
+		owner = nil
+		claimed = false
 	end
 end)
 
