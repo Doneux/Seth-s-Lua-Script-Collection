@@ -3,13 +3,14 @@ local rainbrick = script.Parent
 
 rainbrick.Touched:Connect(function()
 	while true do
-		wait()
+		wait() -- can take a float/int for delay interval, change as desired, but DO NOT remove
     -- set the range around the part where rain can fall
 		local rand = math.random(-1000,1000)
-		local rand2 = math.random(-1000,1000)
+		local rand2 = math.random(-1000,1000) -- we use random xz coords in the set range, change as desired
 		local Rainfall = Instance.new("Part",game.Workspace)
-		Rainfall.Size = Vector3.new(0.5,1,0.5)
-		Rainfall.Position = Vector3.new(rand,50,rand2)
+		Rainfall.Size = Vector3.new(0.5,1,0.5) -- these drops are fairly chunky
+		Rainfall.Position = Vector3.new(rand,50,rand2) -- y coordinate stays at 50, as raindrops should all fall from same height. change height as desired
 		Rainfall.Transparency = 0.5
+		-- currently the parts last forever, need to implement a lifespan so they despawn after some time. perkeks a script on the ground part that deletes them on contact would be good.
 	end
 end)
