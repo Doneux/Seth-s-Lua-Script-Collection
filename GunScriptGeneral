@@ -1,0 +1,148 @@
+--referenced components must exist in Tool model
+local MaxAmmo = 20
+local Ammo = MaxAmmo
+local Reloading = false
+local par = script.Parent
+
+--when assigning barrel tip, use a wait, needs to load in
+--tip is attached to tool, controls visual beam origin
+local tip = script.Parent:WaitForChild("rig").BarrelTip
+local Mouse = game.Players.LocalPlayer:GetMouse()
+
+--note: canFire is not needed, but can be used to prevent spamclicking faster than fire rate
+--on this gun: not necessary; fire rate is fast, spamclicking is skill expression
+local canFire = true
+--Firing is only needed on full auto
+--on this gun: necessary, full auto enabled
+local Firing = false
+
+
+--fix for weirdness, turns controls off when unequipped
+local downConnection
+local upConnection
+
+local function DrawShot(tip, hit)
+
+	--first attachment, position of the barrel tip
+	local p0 = Instance.new("Attachment")
+	p0.Position = tip.Position
+	p0.Parent = workspace.Terrain
+	--second attachment, position of mouse target
+	local p1 = Instance.new("Attachment")
+	p1.Position = hit.Position
+	p1.Parent = workspace.Terrain
+
+	--create beam
+	local beam = Instance.new("Beam")
+	beam.Attachment0 = p0
+	beam.Attachment1 = p1
+	beam.Width0 = 0.1
+	beam.Width1 = 0.1
+	beam.Color = ColorSequence.new(Color3.fromRGB(255, 255, 0))
+	beam.Parent = workspace
+	
+	--beam fade and destroy needs to be in it's own task
+	--otherwise this messes with the fire rate of the gun
+	task.spawn(function()
+		for i = 1, 5 do
+			beam.Transparency = NumberSequence.new(i / 5)
+			task.wait(0.05)
+		end
+		beam:Destroy()
+		p0:Destroy()
+		p1:Destroy()
+	end)
+end
+
+
+par.Equipped:Connect(function()
+	--equip sound
+	par.Handle.equip:Play()
+	
+	--mouse icon
+	Mouse.Icon = "rbxasset://textures/GunCursor.png"
+	
+	--def reload
+	local function Reload()
+		par.Handle.reload:Play()
+		Reloading = true
+		Mouse.Icon = "rbxasset://textures/GunWaitCursor.png"
+		task.wait(3)
+		Ammo = MaxAmmo
+		Reloading = false
+		Mouse.Icon = "rbxasset://textures/GunCursor.png"
+	end
+	
+	--def fire
+	local function Fire()
+		while Firing == true do
+			--shoot conditions
+			if Ammo > 0 and Reloading == false then
+				canFire = false
+
+				--upd ammo
+				Ammo = Ammo-1
+
+				--play sound
+				par.Handle.fire:Play()
+
+				--draw shot
+				DrawShot(tip, Mouse.Hit)
+
+				--dmg to server
+				if Mouse.Target and Mouse.Target.Parent:FindFirstChild("Humanoid")then
+					script.Parent.Damage:FireServer(Mouse.Target.Parent, 40)
+				end
+
+				--wait
+				task.wait(0.1)
+				canFire = true
+				
+			--out of ammo, reload on delay
+			--delaying reload incentivizes skilled players to track ammo
+			elseif Reloading == false and Ammo == 0 then
+				--delay timer
+				task.wait(0.1)
+				par.Handle.empty:Play()
+				task.wait(0.5)
+				--check reloading again, in case player started reloading during timer
+				if Reloading == false then
+					Reload()
+				end
+			else 
+				task.wait()
+			end
+		end
+	end
+	
+	--reload on r
+	local Input = game:GetService("UserInputService")
+	Input.InputBegan:Connect(function(Key)
+		if Key.KeyCode == Enum.KeyCode.R and Reloading == false then
+			Reload()
+		end
+	end)
+	
+	--fire
+	upConnection = Mouse.Button1Up:Connect(function()
+		Firing = false
+	end)
+	downConnection = Mouse.Button1Down:Connect(function()
+		Firing = true
+		Fire()
+	end)
+end)
+
+par.Unequipped:Connect(function()
+	Mouse.Icon = ""
+	Firing = false
+
+	if downConnection then
+		downConnection:Disconnect()
+		downConnection = nil
+	end
+	if upConnection then  -- You have Button1Up too
+		upConnection:Disconnect()
+		upConnection = nil
+	end
+end)
